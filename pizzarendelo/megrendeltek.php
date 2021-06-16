@@ -32,6 +32,7 @@
 <body style="background-color: #FFDDA2">
     <h1 style="color:#337ab7;font-size:50px;text-align:center">Üdvözöllek az admin oldalon!</h1>
     <p style="text-align:center;"><a href="adminreg.php" style="color:#337ab7;font-size:40px;">Új admin/user felvétele</a></p>
+    <p style="text-align:center;"><a href="pizzaupload.php" style="color:#337ab7;font-size:40px;">Új pizza felvétele</a></p>
     <p style="text-align:center;"><a href="rendeles.php?logout='1'" style="color:red;font-size:30px;">Kijelentkezés</a></p>
     <div class="container">
     <div class="table-responsive">

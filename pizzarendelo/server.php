@@ -8,7 +8,7 @@
         $errors = array();
 
     //kapcpsolódás az adatbázishoz
-   $db = mysqli_connect('localhost', 'root', '', 'registration'); //tudom ez így nem biztonságos, de így nem kell létrehoznia tanár úrnak xamppba felhasznalót
+   $db = mysqli_connect('localhost', 'root', '', 'registration');
     
    //Ha a kapcsolódás sikertelen lenne:
    if (!$db) 

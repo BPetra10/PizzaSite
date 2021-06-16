@@ -21,3 +21,8 @@ CREATE TABLE `registration`.`rendeles` (
    `datum` VARCHAR(100) NOT NULL 
   ) ENGINE = InnoDB DEFAULT CHARSET=utf8;
 
+CREATE TABLE `registration`. `pizzak`( 
+`id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY, 
+`nev` VARCHAR(100) NOT NULL , 
+`kep` varchar(100) NOT NULL , 
+`ar` VARCHAR(100) NOT NULL ) ENGINE = InnoDB;
