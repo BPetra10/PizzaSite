@@ -8,6 +8,7 @@
   <script src="bootstrap/other/jquery-3.5.1.min.js"></script>
   <script src="bootstrap/3.4.1/bootstrap.min.js"></script>
 </head>
+
 <body>
 <a name="top"></a>
 <nav class="navbar navbar-default">
@@ -57,10 +58,12 @@
 
 <footer class="container-fluid bg-3 text-center">
   <a href="#top" class="top">Ugrás az oldal tetejére</a>
-</footer>
-    
+</footer> 
+
+</body>
+
 <style>
-    body 
+body 
 {
     font: 20px Montserrat, sans-serif;
     line-height: 1.8;
@@ -144,6 +147,5 @@ span
     color: #555555;
     font-size: 30px;
 }
-</style>   
-</body>
+</style>  
 </html>

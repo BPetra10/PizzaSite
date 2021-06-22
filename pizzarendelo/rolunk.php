@@ -14,7 +14,7 @@
     <style>
         .carousel 
         {
-            position: relative;
+          position: relative;
         }
 
         .carousel-caption 
@@ -30,21 +30,58 @@
         }
         h1
         {
-             font-family:fantasy;
-             color:crimson;
-             font-size: 30px;
-             text-align: center;
+          font-family:fantasy;
+          color:crimson;
+          font-size: 30px;
+          text-align: center;
+        }
+        .navbar-nav
+        {
+          padding-right:150px;
+          font-size:30px;
+          font-family:fantasy;
+        }
+        .navbar-brand
+        {
+          padding-left:150px;
+          font-size:50px;
+        }
+        nav a:hover 
+        { 
+          color: #1abc9c !important; 
+        }
+        .mt-5, .my-5 
+        {
+          margin-top: 1rem!important;
+          margin-bottom: 1rem!important;
+        }
+
+        .navbar
+        {
+          height:85px;
+        }
+        
+        @media screen and (max-width:990px)
+        {
+          .navbar-brand
+          {
+            padding-left:10px;
+          }
+          .navbar-nav
+        {
+          padding-right:10px;
+        }
         }
     </style>
     
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-  <a class="navbar-brand" href="#">Rólunk</a>
+  <nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <a class="navbar-brand">👨‍⚕️ 🍕 👩‍⚕️</a>
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
   </button>
   <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
-    <div class="navbar-nav">
-      <a class="nav-item nav-link active" href="pizza.php">Főoldal</a>
+    <div class="navbar-nav ml-auto">
+      <a class="nav-item nav-link" href="pizza.php">Főoldal</a>
       <a class="nav-item nav-link" href="pizzaink.php">Pizzáink</a>
       <a class="nav-item nav-link" href="register.php">Rendelés</a>
     </div>

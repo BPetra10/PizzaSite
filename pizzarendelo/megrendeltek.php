@@ -25,10 +25,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="bootstrap/other/bootstrap.min.css">
-  <script src="bootstrap/other/jquery-3.5.1.min.js"></script>
-  <script src="bootstrap/other/popper.min.js"></script>
+    <script src="bootstrap/other/jquery-3.5.1.min.js"></script>
+    <script src="bootstrap/other/popper.min.js"></script>
     <title>Admin oldal</title>
 </head>
+
 <body style="background-color: #FFDDA2">
     <h1 style="color:#337ab7;font-size:50px;text-align:center">Üdvözöllek az admin oldalon!</h1>
     <p style="text-align:center;"><a href="adminreg.php" style="color:#337ab7;font-size:40px;">Új admin/user felvétele</a></p>
@@ -40,7 +41,6 @@
         </table>
     </div>     
     </div>      
-	<script type="text/javascript" src="bootstrap/other/jquery-3.2.1.min.js"></script>
 	<script type="text/javascript">
 		$(document).ready(function() {
 			setInterval(function () {

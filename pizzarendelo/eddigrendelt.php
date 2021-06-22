@@ -12,10 +12,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="bootstrap/other/bootstrap.min.css">
-  <script src="bootstrap/other/jquery-3.5.1.min.js"></script>
-  <script src="bootstrap/other/popper.min.js"></script>
+    <script src="bootstrap/other/jquery-3.5.1.min.js"></script>
+    <script src="bootstrap/other/popper.min.js"></script>
     <title>Rendeléseid oldal</title>
 </head>
+
 <body style="background-color: #FFDDA2">
     <h1 style="color:#337ab7;font-size:50px;text-align:center">Itt láthatod az eddig megrendelt pizzáid kedves <?php echo $_SESSION['username']; ?>!</h1>
     <p style="text-align:center"><a href="rendeles.php" style="color: #337ab7; font-size:40px;">Visssza a rendeléshez</a></p>
