@@ -49,7 +49,7 @@
     <div class="masonryblocks">
         <h2><?php echo $row['nev'];?></h2>
         <img src="Kepek/pizzak/<?php echo $row['kep'];?>" alt="<?php echo $row['nev'];?>" title="<?php echo $row['nev'];?>">
-        <h3><?php echo $row['ar'];?></h3>
+        <h3><?php echo $row['ar'];?> Ft</h3>
     </div>
     
 <?php
@@ -57,7 +57,7 @@
     }
     else
     {
-      "Nincs rögzített adat a pizzák táblában!";
+      echo "<p style='color:red;font-size:30px;text-align:center;'>Nincs rögzített adat a pizzák táblában!</p>";
     }
   ?>
   </div>

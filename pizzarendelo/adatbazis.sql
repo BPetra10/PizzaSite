@@ -25,4 +25,18 @@ CREATE TABLE `registration`. `pizzak`(
 `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY, 
 `nev` VARCHAR(100) NOT NULL , 
 `kep` varchar(100) NOT NULL , 
-`ar` VARCHAR(100) NOT NULL ) ENGINE = InnoDB;
+`ar` INT(255) NOT NULL ) ENGINE = InnoDB;
+
+INSERT INTO `registration`.`pizzak` (`id`, `nev`, `kep`, `ar`) VALUES 
+(NULL, 'Gombás pizza', 'gombas.jpg', 1600), 
+(NULL, 'Hawaii pizza', 'hawaii.jpg', 1800), 
+(NULL, 'Kukoricás pizza', 'kukoricas.jpg', 1700), 
+(NULL, 'Mexikói pizza', 'mexikoi.jpg', 1800), 
+(NULL, 'Szalámis pizza', 'szalamis.jpg', 1700), 
+(NULL, 'Négysajtos pizza', 'negysajtos.jpg', 1700), 
+(NULL, 'Baconos-tojásos pizza', 'bacon.jpg', 1900), 
+(NULL, 'Sonkás pizza', 'sonkas.jpg', 1900), 
+(NULL, 'Kívánság pizza', 'kivansag.png', 2200), 
+(NULL, 'Gyrosos pizza', 'gyrosos.jpg', 2000), 
+(NULL, 'Húsimádó pizza', 'husimado.jpg', 2100), 
+(NULL, 'Manhattan pizza', 'manhattan.jpg', 1900);

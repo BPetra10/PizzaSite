@@ -4,6 +4,60 @@
     {
         header('location: login.php');
     }
+
+    $connect = mysqli_connect('localhost', 'root', '', 'registration');
+ 
+    if(isset($_POST['kosarba']))
+    {
+      if(isset($_SESSION['kosarba']))
+      {
+        $item_array_id = array_column($_SESSION["kosarba"], "item_id"); 
+        if(!in_array($_GET["id"], $item_array_id))  //megnézzük, hogy a pizza hozzá van-e már adva a kosárhoz
+        {
+          $count = count($_SESSION["kosarba"]);  //Eltároljuk, hogy hány elemünk van a tömbünkben
+          $item_array = 
+          array(  
+            'item_id' =>  $_GET["id"],  
+            'item_name' =>  $_POST["termeknevOssz"],  
+            'item_price' => $_POST["termekarOssz"],  
+            'item_quantity' =>  $_POST["quantity"]  
+          ); 
+          $_SESSION["kosarba"][$count] = $item_array; //tároljuk az adatokat a tömbben
+        }
+        else
+        {
+          echo '<script>alert("A pizza már a kosárban van!")</script>';  
+          echo '<script>window.location="rendeles.php"</script>'; //MIután az alertet leokézza a vásárló, visszairányít a rendeles oldalra
+        }
+      }
+      else
+      {
+        $item_array = 
+        array(  
+          'item_id' =>  $_GET["id"],  
+          'item_name' =>  $_POST["termeknevOssz"],  
+          'item_price' => $_POST["termekarOssz"],  
+          'item_quantity' =>  $_POST["quantity"]  
+        ); 
+        $_SESSION["kosarba"][0] = $item_array; 
+      }
+    }
+
+    if(isset($_GET["action"]))  
+    {  
+      if($_GET["action"] == "delete") //Ha az action = törlés 
+      {  
+        foreach($_SESSION["kosarba"] as $keys => $values)  
+        {  
+          if($values["item_id"] == $_GET["id"])  
+          {  
+            unset($_SESSION["kosarba"][$keys]);  
+            echo '<script>alert("Pizza eltávolítva a kosárból.")</script>';  
+            echo '<script>window.location="rendeles.php"</script>';  
+          }  
+        }  
+      }  
+    } 
 ?> 
 <!DOCTYPE html>
 <html>
@@ -15,276 +69,154 @@
         <title>Rendelés</title>
     </head>
     <body style="background-color:#FFDDA2"> 
-        <div class="sidenav">
-            <h3 style="color:white; text-align:center; font-weight: bold;">Válassza ki a rendelését!</h3>
-            <form action ="index.php" method="post">
-            <p><input type="checkbox" name="choice[]" value="1600" onclick="totalIt()"> <b>Gombás pizza</b> <br> Ár: 1600 Ft Mennyiség: 
-            <input type="number" min="0" max="9" value="0" name="1" class="quantity" onchange="totalIt()" oninput="validity.valid||(value='0');" 
-            onKeyPress="if(this.value.length==1) return false;"><p>
-
-            <p><input type="checkbox" name="choice[]" value="1800" onclick="totalIt()"> <b>Hawaii pizza</b> <br> Ár: 1800 Ft Mennyiség: 
-            <input type="number" min="0"  max="9" value="0" name="2" class="quantity" onchange="totalIt()"  oninput="validity.valid||(value='0');" 
-            onKeyPress="if(this.value.length==1) return false;"></p>
-
-            <p><input type="checkbox" name="choice[]" value="2000" onclick="totalIt()"> <b>Húsimádó pizza</b> <br> Ár: 2000 Ft Mennyiség: 
-            <input type="number" min="0"  max="9" value="0" name="3" class="quantity" onchange="totalIt()"  oninput="validity.valid||(value='0');" 
-            onKeyPress="if(this.value.length==1) return false;"></p>
-
-            <p><input type="checkbox" name="choice[]" value="1500" onclick="totalIt()"> <b>Kukoricás pizza</b> <br> Ár: 1500 Ft Mennyiség: 
-            <input type="number" min="0"  max="9" value="0" name="4" class="quantity" onchange="totalIt()"  oninput="validity.valid||(value='0');" 
-            onKeyPress="if(this.value.length==1) return false;"></p>
-
-            <p><input type="checkbox" name="choice[]" value="1850" onclick="totalIt()"><b>Mexikói pizza</b> <br>  Ár: 1850 Ft Mennyiség: 
-            <input type="number" min="0"  max="9" value="0" name="5" class="quantity" onchange="totalIt()"  oninput="validity.valid||(value='0');" 
-            onKeyPress="if(this.value.length==1) return false;"></p>
-
-            <p><input type="checkbox" name="choice[]" value="1650" onclick="totalIt()"> <b>Négysajtos pizza</b> <br>  Ár: 1650 Ft Mennyiség: 
-            <input type="number" min="0"  max="9" value="0" name="6" class="quantity" onchange="totalIt()"  oninput="validity.valid||(value='0');" 
-            onKeyPress="if(this.value.length==1) return false;"></p>
-
-            <p><input type="checkbox" name="choice[]" value="1700" onclick="totalIt()"> <b>Fokhagymás-tejfölös-sonkás pizza</b> <br> Ár: 1700 Ft Mennyiség: 
-            <input type="number" min="0"  max="9" value="0" name="7" class="quantity" onchange="totalIt()"  oninput="validity.valid||(value='0');" 
-            onKeyPress="if(this.value.length==1) return false;"></p>
-
-            <p><input type="checkbox" name="choice[]" value="1900" onclick="totalIt()"> <b>Szalámis pizza</b> <br> Ár: 1900 Ft Mennyiség: 
-            <input type="number" min="0"  max="9" value="0" name="8" class="quantity" onchange="totalIt()"  oninput="validity.valid||(value='0');" 
-            onKeyPress="if(this.value.length==1) return false;"></p>
-
-            <p><input type="checkbox" name="choice[]" value="1950" onclick="totalIt()"> <b>Baconos-tojásos pizza</b> <br> Ár: 1950 Ft Mennyiség: 
-            <input type="number" min="0"  max="9" value="0" name="9" class="quantity" onchange="totalIt()"  oninput="validity.valid||(value='0');" 
-            onKeyPress="if(this.value.length==1) return false;"></p>
-
-            <p><input type="checkbox" name="choice[]" value="1750" onclick="totalIt()"> <b>Sonkás pizza</b> <br> Ár: 1750 Ft Mennyiség: 
-            <input type="number" min="0"  max="9" value="0" name="10" class="quantity" onchange="totalIt()" oninput="validity.valid||(value='0');" 
-            onKeyPress="if(this.value.length==1) return false;"></p>
-
-            <p><input type="checkbox" name="choice[]" value="2100" onclick="totalIt()"> <b>Kívánság pizza</b> <br> Ár: 2100 Ft Mennyiség: 
-            <input type="number" min="0"  max="9" value="0" name="11" class="quantity" onchange="totalIt()" oninput="validity.valid||(value='0');" 
-            onKeyPress="if(this.value.length==1) return false;"></p>
-
-            <p><input type="checkbox" name="choice[]" value="1890" onclick="totalIt()"> <b>Gyrosos pizza</b> <br> Ár: 1890 Ft Mennyiség: 
-            <input type="number" min="0"  max="9" value="0" name="12" class="quantity" onchange="totalIt()" oninput="validity.valid||(value='0');" 
-            onKeyPress="if(this.value.length==1) return false;"></p>
-            <input type="button" value="Kiválasztottak törlése" onclick="torol();">
-            <h4 id="total" style="color:white;"><b>Végösszeg: 0 Ft</b></h4>
-            <textarea name="megjegyzes" rows="4" cols="30" maxlength="60" placeholder="Megjegyzés hozzáadásához kattintson ide"></textarea>
-            <h4  style="color:white;"><b>Add meg a szállítási címed:<b></h4>
-            <input type="text" name="Cim" maxlength="30">
-            <input type="submit" value="Megrendel" name="rendel"><br><br>
-            </form>
+    <?php  if (isset($_SESSION['username'])) : ?>
+      <h3 style="color:#337ab7;font-size:40px;text-align:center;">Válassza ki a rendelését kedves <strong><?php echo $_SESSION['username'];?></strong>!</h3>
+      <p style="font-size:25px;text-align:center;">
+      <a href="eddigrendelt.php" style="color:black;">Rendelési előzmények</a><span class="tab"></span>
+      <a href="rendeles.php?logout='1'" style="color:black;">Kijelentkezés</a>
+      </p>
+    <?php endif ?>
+    <div class="masonryholder">
+    <?php 
+      $query = "SELECT * FROM pizzak";
+      $result = mysqli_query($connect,$query);
+      $check_pizzak_rows = mysqli_num_rows($result) > 0;
+    
+      if ($check_pizzak_rows) 
+      {
+        while($row = mysqli_fetch_array($result))
+       {
+    ?>
+      <div class="masonryblocks">
+      <form action="rendeles.php?action=add&id=<?php echo $row["id"];?>" method="POST">
+      <div style="border:1px solid #333; background-color:#f1f1f1; border-radius:5px; padding:16px;" text-align="center">  
+      <img src="Kepek/pizzak/<?php echo $row["kep"]; ?>" class="img-responsive">
+      <h3 class="text-info" style="text-align:center;"><?php echo $row["nev"];?></h3>
+      <h4 class="text-danger" style="text-align:center;"><?php echo $row["ar"];?> Ft</h4>  
+      <input type="number" min="1" max="9" name="quantity" class="form-control" value="1" oninput="validity.valid||(value='1');" 
+      onKeyPress="if(this.value.length==1) return false;">  
+      <input type="hidden" name="termeknevOssz" value="<?php echo $row["nev"];?>">  
+      <input type="hidden" name="termekarOssz" value="<?php echo $row["ar"];?>">  
+      <input type="submit" name="kosarba" style="margin-top:5px;" class="btn btn-success" value="Kosárba">  
+      </div> 
+      </form>
+      </div>
+    <?php
+        }
+      }
+      else
+      {
+        echo "<p style='color:red;font-size:30px;text-align:center;'>Nincs rögzített adat a pizzák táblában!</p>";
+      }
+    ?>
+    </div>
+    <div style="clear:both"></div><br>  
+     <h3 style="text-align:center;margin:0;">Rendelési adatok:</h3>  
+        <div class="table-responsive" style="width:80%; margin:auto;">  
+          <table class="table table-bordered">  
+            <tr style="background-color:#337ab7;">  
+              <th width="30%">Pizzanév</th>  
+              <th width="10%">Mennyiség</th>  
+              <th width="10%">Ár</th>  
+              <th width="15%">Összesen</th>  
+              <th width="5%">Törlés</th>  
+            </tr>
+            <?php   
+              if(!empty($_SESSION["kosarba"]))  //ha a kosár nem üres
+              {  
+                  $total = 0;  //Az összes pizzának az ára, amit rendelünk, tehát a végösszeg
+                  foreach($_SESSION["kosarba"] as $keys => $values)  
+                  {  
+            ?>  
+            <tr class="info">  
+             <td><?php echo $values["item_name"]; ?></td>  
+             <td><?php echo $values["item_quantity"]; ?></td>  
+             <td><?php echo $values["item_price"]; ?> Ft</td>  
+             <td><?php echo number_format($values["item_quantity"] * $values["item_price"], 2); ?> Ft</td>  
+             <td><a href="rendeles.php?action=delete&id=<?php echo $values["item_id"]; ?>"><span class="text-danger">Törlés</span></a></td>  
+            </tr>    
+            <?php  
+             $total = $total + ($values["item_quantity"] * $values["item_price"]);  
+                  }  
+            ?>
+             <tr style="background-color:#337ab7;">  
+               <td colspan="3" style="text-align:right;color:#FFDDA2;font-weight:bold;">Végösszeg:</td>  
+               <td style="color:#FFDDA2;font-weight:bold;"><?php echo number_format($total, 2); ?> Ft</td>  
+               <td></td>  
+              </tr>  
+            <?php  
+              }  
+            ?>  
+          </table>
         </div>
-<div class="main">
-        <?php  if (isset($_SESSION['username'])) : ?>
-    	<p style="color:black;font-size:25px;">Üdvözlet <strong><?php echo $_SESSION['username']; ?></strong>!</p>
-      <p style="font-size:25px;"><a href="eddigrendelt.php" style="color: black">Eddigi rendeléseinek megtekintéséhez kattintson ide!</a></p>
-        <p style="font-size:25px;"><a href="rendeles.php?logout='1'" style="color:black;">Kijelentkezés</a></p>
-        <?php endif ?>    
-  <div class="row equal">
-    <div class="col-sm-4">
-      <div class="panel panel-primary">
-        <div class="panel-heading">Gombás pizza</div>
-        <div class="panel-body"><img src="Kepek/oldalhoz/gombas.jpg" class="img-responsive" style="width:100%" alt="Gombás" title="Gombás"></div>
-        <div class="panel-footer">Ár: 1600Ft<br> Vegetáriánus</div>
-      </div>
-    </div>
-    <div class="col-sm-4"> 
-      <div class="panel panel-primary">
-        <div class="panel-heading">Hawaii pizza</div>
-        <div class="panel-body"><img src="Kepek/oldalhoz/hawaii.jpg" class="img-responsive" style="width:100%" alt="Hawaii" title="Hawaii"></div>
-        <div class="panel-footer">Ár: 1800Ft</div>
-      </div>
-    </div>
-    <div class="col-sm-4"> 
-      <div class="panel panel-primary">
-        <div class="panel-heading">Húsimádó pizza</div>
-        <div class="panel-body"><img src="Kepek/oldalhoz/husimado.jpg" class="img-responsive" style="width:100%" alt="Húsimádó" title="Húsimádó"></div>
-        <div class="panel-footer">Ár: 2000Ft</div>
-      </div>
-    </div>
-  </div> <br>
-      
-  <div class="row equal">
-    <div class="col-sm-4">
-      <div class="panel panel-primary">
-        <div class="panel-heading">Kukoricás pizza</div>
-        <div class="panel-body"><img src="Kepek/oldalhoz/kukoricas.jpg" class="img-responsive" style="width:100%" alt="Kukoricás" title="Kukoricás"></div>
-        <div class="panel-footer">Ár: 1500Ft</div>
-      </div>
-    </div>
-    <div class="col-sm-4"> 
-      <div class="panel panel-primary">
-        <div class="panel-heading">Mexikói pizza</div>
-        <div class="panel-body"><img src="Kepek/oldalhoz/mexikoi.jpg" class="img-responsive" style="width:100%" alt="Mexikói" title="Mexikói"></div>
-        <div class="panel-footer">Ár: 1850Ft</div>
-      </div>
-    </div>
-    <div class="col-sm-4"> 
-      <div class="panel panel-primary">
-        <div class="panel-heading">Négysajtos pizza</div>
-        <div class="panel-body"><img src="Kepek/oldalhoz/negysajtos.jpg" class="img-responsive" style="width:100%" alt="Négysajtos" title="Négysajtos"></div>
-        <div class="panel-footer">Ár: 1650Ft<br> Vegetáriánus</div>
-      </div>
-    </div>
-  </div> <br>
-        
-  <div class="row equal">
-    <div class="col-sm-4">
-      <div class="panel panel-primary">
-        <div class="panel-heading">Fokhagymás-tejfölös-sonkás pizza</div>
-        <div class="panel-body"><img src="Kepek/oldalhoz/tejfolos.jpg" class="img-responsive" style="width:100%" alt="Fokhagymás-tejfölös-sonkás" title="Fokhagymás-tejfölös-sonkás"></div>
-        <div class="panel-footer">Ár: 1700Ft</div>
-      </div>
-    </div>
-    <div class="col-sm-4"> 
-      <div class="panel panel-primary">
-        <div class="panel-heading">Szalámis pizza</div>
-        <div class="panel-body"><img src="Kepek/oldalhoz/szalamis.jpg" class="img-responsive" style="width:100%" alt="Szalámis" title="Szalámis"></div>
-        <div class="panel-footer">Ár: 1900Ft <br> 6 feltétel választható.</div>
-      </div>
-    </div>
-    <div class="col-sm-4"> 
-      <div class="panel panel-primary">
-        <div class="panel-heading">Baconos-tojásos pizza</div>
-        <div class="panel-body"><img src="Kepek/oldalhoz/bacon.jpg" class="img-responsive" style="width:100%" alt="Baconos-tojásos" title="Baconos-tojásos"></div>
-        <div class="panel-footer">Ár: 1950Ft</div>
-      </div>
-    </div>
-  </div><br>
-        
-  <div class="row equal">
-    <div class="col-sm-4">
-      <div class="panel panel-primary">
-        <div class="panel-heading">Sonkás pizza</div>
-        <div class="panel-body"><img src="Kepek/oldalhoz/sonkas.jpg" class="img-responsive" style="width:100%" alt="Sonkás" title="Sonkás"></div>
-        <div class="panel-footer">Ár: 1750Ft</div>
-      </div>
-    </div>
-    <div class="col-sm-4"> 
-      <div class="panel panel-primary">
-        <div class="panel-heading">Kívánság pizza</div>
-        <div class="panel-body"><img src="Kepek/oldalhoz/kivansag.png" class="img-responsive" style="width:100%" alt="Kívánság" title="Kívánság"></div>
-        <div class="panel-footer">Ár: 2100Ft <br> 6 feltétel választható.</div>
-      </div>
-    </div>
-    <div class="col-sm-4"> 
-      <div class="panel panel-primary">
-        <div class="panel-heading">Gyrosos pizza</div>
-        <div class="panel-body"><img src="Kepek/oldalhoz/gyrosos.jpg" class="img-responsive" style="width:100%" alt="Gyrosos" title="Gyrosos"></div>
-        <div class="panel-footer">Ár: 1890Ft</div>
-      </div>
-    </div>
-  </div>
-</div>
-
-        <style>
-            textarea 
-            {
-                resize: none;  
-            }
-            
-            p
-            {
-                font-size:15px;
-                color:white;
-                font-weight:normal;
-            }
-            .quantity
-            {
-                color:black;
-            }
-
-            .sidenav 
-            {
-                height: 100%;
-                width: 325px;
-                position: fixed;
-                z-index: 1;
-                top: 0;
-                left: 0;
-                background-color:#337ab7;
-                overflow-x: hidden;
-            }
-
-            .main 
-            {
-              margin-left: 325px; /* Ugyanakakor mint a sidenav szélessége */
-              font-size:20px; /*Görgetés engedélyezésért*/
-              text-align:center;
-              padding: 0px 10px;
-            }
-
-            @media screen and (max-height: 450px) 
-            {
-              .sidenav {padding-top: 10px;}
-            }   
-
-            .panel 
-            {
-             width: 100%;
-             height: 100%;
-             background-color:#e8ebe9;
-            }
-        
-            .panel-footer
-            {
-             background-color:#e8ebe9;
-             font-weight:normal;
-            }
-        
-            @media (min-width: 992px) 
-            {
-                .equal
-                {  
-                display: -ms-flexbox;
-                display: -webkit-flex;
-                display: flex;
-                }
-            } 
-            </style>
-        <script>
-                  if(performance.navigation.type == 2)
-                  {
-                    location.reload(true); //ez azért szükséges, hogyha a felhasználó visszagombot nyom, akkor az oldal alaphelyzetbe kerüljön
-                  }
-            function totalIt() 
-            {
-                var input = document.getElementsByName("choice[]");
-                var input2 =  document.getElementsByClassName("quantity");
-                var total = 0;
-                    for (var i = 0; i < input.length; i++) 
-                    {
-                      if (input[i].checked) 
-                      {
-                        input2[i].min = 1;
-                        if(input2[i].value==0)
-                        {
-                          input2[i].value=1;
-                        }
-                        total += parseFloat(input[i].value*input2[i].value);
-                      }
-                      else
-                      {
-                        input2[i].min = 0;
-                        input2[i].value = 0;
-                      }
-                    }
-                document.getElementById("total").innerHTML = "Végösszeg: " +total +" Ft";
-            }
-
-            function torol()
-            {
-              var input = document.getElementsByName("choice[]");
-              var input2 =  document.getElementsByClassName("quantity");
-                  for (var i = 0; i < input.length; i++) 
-                  {
-                    if (input[i].checked) 
-                    {
-                      input[i].checked = false;
-                      input2[i].value = 0;
-                    }
-                  }
-                document.getElementById("total").innerHTML = "Végösszeg: 0 Ft";
-            }
-        </script>
     </body>
+    <script>
+    //Ez a függvény megakadályozza, hogy a rendelő üresen hagyja a mennyiség mezőt.
+        const numInputs = document.querySelectorAll('input[type=number]')
+        numInputs.forEach(function(input) 
+      { 
+          input.addEventListener('change', function(e) 
+        {
+          if (e.target.value == '') 
+          {
+            e.target.value = 1
+          }
+        })
+      })
+    </script>
+    <style>
+    .tab
+    {
+      display: inline-block;
+      margin-left: 80px;
+    }
+    .masonryholder
+    {
+      column-count: 4;
+      column-gap: 20px;
+      margin: 0 auto; 
+      max-width:1280px;
+    }
+    .masonryblocks
+    {
+      display:inline-block;
+      padding:10px;
+      margin: 0 0 15px;
+      width: auto;
+      box-sizing: border-box;
+    }
+    .masonryblocks img
+    {
+      width:100%;
+    }
+
+    @media screen and (max-width:568px)
+    {
+      .masonryholder
+      {
+        column-count: 1;
+      }
+    }
+    @media screen and (min-width:569px)
+    {
+      .masonryholder
+      {
+        column-count: 2;
+      }
+    }
+    @media screen and (min-width:1028px)
+    {
+      .masonryholder
+      {
+        column-count: 3;
+      }
+    }
+    @media screen and (min-width:1280px)
+    {
+      .masonryholder
+      {
+        column-count: 4;
+      }
+    }
+    </style>
 </html>
